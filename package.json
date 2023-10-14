@@ -1,0 +1,21 @@
+{
+  "name": "onthefly",
+  "version": "1.0.0",
+  "description": "Planning a big trip like a bachelor party, graduation tour, or road trip can get complicated, especially when balancing different schedules and budgets. This web app makes planning trips with friends and family a breeze, allowing a user to create a new trip and add destinations to that trip",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "cd server && nodemon --require dotenv/config server.js",
+    "reset": "cd server/config && node --require dotenv/config reset.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "nodemon": "^3.0.1",
+    "pg": "^8.11.3"
+  }
+}
