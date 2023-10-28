@@ -7,8 +7,26 @@ const AddTripOptionCard = (props) =>  {
   const {destination_id} = useParams();
 
   const addToTrip = async (event) => {
-    event.preventDefault();
+    event.preventDefault(); // Prevents page from refreshing
 
+    // Creates trip destination object
+    const tripDestination = {
+      trip_id: props.id,
+      destination_id: destination_id
+    }
+
+    // Creates trip destination options
+    const options = {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(tripDestination)
+    }
+
+    // Adds trip destination to database
+    fetch('/api/trips_destinations', options)
+    window.location.href = `/destinations`;
 
 }
 

@@ -7,7 +7,10 @@ const CreateActivity = () => {
     const [activity, setActivity] = useState({activity: "" })
     const {trip_id} = useParams();
 
-
+    /**
+     * Update the state variable when the user types in the input field
+     * @param {*} event 
+     */
     const handleChange = (event) => {
         const {name, value} = event.target;
         setActivity( (prev) => {
@@ -18,9 +21,27 @@ const CreateActivity = () => {
         })
     }
     
+    /**
+     * Create a new activity
+     * @param {*} event 
+     */
     const createActivity = async (event) => {
-        event.preventDefault();
+        // Avoid default behavior of the submit button
+        if (event) {
+            event.preventDefault();
+        }
 
+        // Create a new activity
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(activity)
+        };
+
+        const response = await fetch(`/api/activities/${trip_id}`, options);
+        window.location.href = `/`;
 
     }
 

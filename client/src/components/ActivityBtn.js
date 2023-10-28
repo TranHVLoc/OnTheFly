@@ -5,8 +5,21 @@ const ActivityBtn = (props) =>  {
 
   const [num_votes, setNumVotes] = useState(props.num_votes)
 
+  /**
+   * Update the number of likes for a specific activity
+   */
   const updateCount = () => {
-
+    const options = {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({num_votes: num_votes + 1})
+    };
+    // Update the number of likes for a specific activity
+    fetch(`/api/activities/${props.id}`, options)
+    // Update the number of likes for a specific activity concurrently
+    setNumVotes((num_votes) => num_votes + 1)
   }
 
   return (

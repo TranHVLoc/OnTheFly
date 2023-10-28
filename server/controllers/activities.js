@@ -6,8 +6,9 @@ import { pool } from '../config/database.js';
  * @param {*} res 
  */
 const createActivity = async (req, res) => {
-    const { trip_id } = req.params.trip_id;
-    const { activity, num_votes } = req.body;
+    const trip_id = req.params.trip_id;
+    const { activity } = req.body;
+    const num_votes = 0;
 
     // Add a SQL query to the database to insert a new row into activities table
     const createActivityQuery = `

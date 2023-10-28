@@ -34,5 +34,14 @@
         "start_date": "2023-05-08",
         "end_date": "2023-05-17",
         "total_cost": 4879.00
+    },
+    {
+        "title": "Japan: Tokyo, Kyoto & Osaka",
+        "description": "Experience the best of Japan's culture, history, and cuisine on this 12-day tour. Begin in Tokyo, where you'll explore the city's vibrant neighborhoods and iconic landmarks. Then, travel to Kyoto to visit ancient temples and shrines, and learn about traditional Japanese arts and crafts. Finally, head to Osaka for a taste of the city's famous street food and nightlife.",
+        "img_url": "https://tinyurl.com/2cfn6j44",
+        "num_days": 12,
+        "start_date": "2022-10-15T04:00:00.000Z",
+        "end_date": "2022-10-26T04:00:00.000Z",
+        "total_cost": "$5,899.00"
     }
 ]

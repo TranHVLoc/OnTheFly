@@ -7,6 +7,7 @@ const CreateDestination = () => {
     const [destination, setDestination] = useState({destination: "", description: "", city: "", country: "", img_url: "", flag_img_url: "" })
     const {trip_id} = useParams();
 
+
     const handleChange = (event) => {
         const {name, value} = event.target;
         setDestination( (prev) => {
@@ -18,22 +19,58 @@ const CreateDestination = () => {
     }
     
     const createDestination = async (event) => {
-        
-        event.preventDefault();
+        // Prevents page from refreshing
+        if (event) {
+            event.preventDefault();
+        }
 
-
+        /**
+         * 1. Add destination to database
+         */
         const addDestination = async () => {
+            // Creates destination object
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(destination)
+            }
 
- 
-        
+            // Adds destination to database
+            const response = await fetch('/api/destinations', options)
+            const data = await response.json()  // get the data from the response
+            setDestination(data)    // set destination to the data returned from the database
+            return data.id
         }
 
+        /**
+         * 2. Add trip destination to database
+         * @param {*} destination_id 
+         */
         const createTripDestination = async (destination_id) => {
+            // Creates trip destination object
+            const tripDestination = {
+                trip_id: trip_id,
+                destination_id: destination_id
+            }
+            // Creates trip destination options
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(tripDestination)
+            }
 
-
-        
+            // Adds trip destination to database
+            const response = await fetch('/api/trip_destinations', options)
+            const data = await response.json()  // get the data from the response
+            return data
         }
 
+        // Execute the functions
+        addDestination().then(res => createDestination(res)).then(res => window.location = `/destinations`)
 
     }
 

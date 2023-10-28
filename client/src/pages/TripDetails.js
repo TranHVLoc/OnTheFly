@@ -12,20 +12,23 @@ const TripDetails = ({data}) => {
     const [destinations, setDestinations] = useState([])
 
     useEffect(() => {
+        // Filter trips by id
         const result = data.filter(item => item.id === parseInt(id))[0];
         setPost({id: parseInt(result.id), title: result.title, description: result.description, img_url: result.img_url, num_days: parseInt(result.num_days), start_date: result.start_date.slice(0,10), end_date: result.end_date.slice(0,10), total_cost: result.total_cost});
 
         const fetchActivities = async () => {
-
-
+            const response = await fetch(`/api/activities/${id}`)
+            const data = await response.json()  // get the data from the response
+            setActivities(data) // Set activities to the data returned from the database
         }
 
         const fetchDestinations = async () => {
-
-            
+            const response = await fetch(`/api/trips_destinations/destinations/${id}`)
+            const data = await response.json()  // get the data from the response
+            setDestinations(data) // Set destinations to the data returned from the database
         }
 
-
+        // Fetches activities and destinations from database
         fetchActivities();
         fetchDestinations();
 

@@ -30,6 +30,18 @@ const App = () => {
 
   }, []);
 
+  // Fetches destinations from database
+  useEffect(() => {
+    const fetchDestinations = async () => {
+      const response = await fetch('/api/destinations');
+      const data = await response.json();
+      setDestinations(data);
+    }
+
+    fetchDestinations();
+
+  }, []);
+
   // Sets up routes
   let element = useRoutes([
     {
