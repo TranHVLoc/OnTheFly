@@ -1,0 +1,18 @@
+[
+    {
+        "destination": "Tower Bridge",
+        "description": "A movable bridge of the double-leaf bascule (drawbridge) type that spans the River Thames between the Greater London boroughs of Tower Hamlets and Southwark. It is a distinct landmark that aesthetically complements the Tower of London, which it adjoins.",
+        "city": "London",
+        "country": "The United Kingdom",
+        "img_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Tower_Bridge_from_Shad_Thames.jpg/1200px-Tower_Bridge_from_Shad_Thames.jpg",
+        "flag_img_url": "https://cdn.britannica.com/25/4825-050-977D8C5E/Flag-United-Kingdom.jpg"
+    },
+    {
+        "destination": "Great Pyramid of Giza",
+        "description": "The largest Egyptian pyramid and served as the tomb of pharaoh Khufu, who ruled during the Fourth Dynasty of the Old Kingdom. Built in the early 26th century BC, over a period of about 27 years, the pyramid is the oldest of the Seven Wonders of the Ancient World, and the only wonder that has remained largely intact. It is the most famous monument of the Giza pyramid complex, which is part of the UNESCO World Heritage Site",
+        "city": "Cairo",
+        "country": "Eguypt",
+        "img_url": "https://i.natgeofe.com/n/535f3cba-f8bb-4df2-b0c5-aaca16e9ff31/giza-plateau-pyramids.jpg",
+        "flag_img_url": "https://cdn.britannica.com/85/185-004-1EA59040/Flag-Egypt.jpg"
+    }
+]

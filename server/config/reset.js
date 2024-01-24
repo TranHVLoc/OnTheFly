@@ -3,16 +3,18 @@ import './dotenv.js';
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
 import fs from 'fs';
-import { create } from 'domain';
 
 // Set to the URL to the curent file
 const currentPath = fileURLToPath(import.meta.url);
 
-// Set to the data.json file
+// Set to the data.json and data_destination.json file
 const tripsFile = fs.readFileSync(path.join(dirname(currentPath), '../config/data/data.json'));
+const destinationsFile = fs.readFileSync(path.join(dirname(currentPath), '../config/data/data_destination.json'));
 
 // Parse the data.json file
 const tripsData = JSON.parse(tripsFile);
+// Parse the data_destination.json file
+const destinationsData = JSON.parse(destinationsFile);
 
 /**
  * @description - Reset the database
@@ -82,6 +84,8 @@ const seedTripsTable = async () => {
  */
 const createDestinationTable = async () => {
     const createDestinationTableQuery = `
+        DROP TABLE IF EXISTS destinations CASCADE;
+
         CREATE TABLE IF NOT EXISTS destinations (
             id SERIAL PRIMARY KEY,
             destination VARCHAR(100) NOT NULL,
@@ -104,10 +108,49 @@ const createDestinationTable = async () => {
 
 /**
  * @description - Reset the database
+ * Insert destinations data into the destinations table
+ */
+const seedDestinationsTable = async () => {
+    await createDestinationTable();
+
+    destinationsData.forEach((destination) => {
+        const insertQuery = {
+            text: `INSERT INTO destinations (destination, description, city, country, img_url, flag_img_url)
+                    VALUES ($1, $2, $3, $4, $5, $6)`
+        }
+
+        const values = [
+            destination.destination,
+            destination.description,
+            destination.city,
+            destination.country,
+            destination.img_url,
+            destination.flag_img_url
+        ];
+
+        try {
+            const query = pool.query(insertQuery, values, (error, results) => {
+                if (error) {
+                    console.log('❌ Error seeding destination', error);
+                    return;
+                }
+    
+                console.log(`✅ ${destination.destination} added successfully!`);
+            });
+        } catch (error) {
+            console.log('❌ Error seeding destination', error);
+        }
+    })
+}
+
+/**
+ * @description - Reset the database
  * Create new activities table
  */
 const createActivitiesTable = async () => {
     const createActivitiesTableQuery = `
+        DROP TABLE IF EXISTS activities CASCADE;
+
         CREATE TABLE IF NOT EXISTS activities (
             id SERIAL PRIMARY KEY,
             trip_id INTEGER NOT NULL,
@@ -132,6 +175,8 @@ const createActivitiesTable = async () => {
  */
 const createTripsDestinationsTable = async () => {
     const createTripsDestinationsTableQuery = `
+        DROP TABLE IF EXISTS trips_destinations CASCADE;
+
         CREATE TABLE IF NOT EXISTS trips_destinations (
             trip_id INTEGER NOT NULL,
             destination_id INTEGER NOT NULL,
@@ -156,6 +201,8 @@ const createTripsDestinationsTable = async () => {
  */
 const createUsersTable = async () => {
     const createUsersTableQuery = `
+        DROP TABLE IF EXISTS users CASCADE;
+
         CREATE TABLE IF NOT EXISTS users (
             id SERIAL PRIMARY KEY,
             githubid INTEGER NOT NULL,
@@ -168,7 +215,7 @@ const createUsersTable = async () => {
     // Create table with above schema
     try {
         const query = await pool.query(createUsersTableQuery);
-        console.log('🎉 users table created successfully!');
+        console.log('🎉 Users table created successfully!');
     } catch (error) {
         console.log('❌ Error creating users table: ', error);
     }
@@ -178,40 +225,41 @@ const createUsersTable = async () => {
  * @description - Reset the database
  * Create new trips users table
  */
-const createTripsUsersTable = async () => {
+const createUsersTripsTable = async () => {
     const createTripsUsersTableQuery = `
-        CREATE TABLE IF NOT EXISTS trips_users (
+        DROP TABLE IF EXISTS users_trips CASCADE;
+
+        CREATE TABLE IF NOT EXISTS users_trips (
+            id SERIAL PRIMARY KEY NOT NULL,
             trip_id INTEGER NOT NULL,
-            user_id INTEGER NOT NULL,
-            PRIMARY KEY (trip_id, user_id),
-            FOREIGN KEY (trip_id) REFERENCES trips(id) ON UPDATE CASCADE,
-            FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE
+            username TEXT NOT NULL,
+            FOREIGN KEY (trip_id) REFERENCES trips(id) ON UPDATE CASCADE
         );
     `;
 
     // Create table with above schema
     try {
         const query = await pool.query(createTripsUsersTableQuery);
-        console.log('🎉 trips_users table created successfully!');
+        console.log('🎉 users_trips table created successfully!');
     } catch (error) {
-        console.log('❌ Error creating trips_users table: ', error);
+        console.log('❌ Error creating users_trips table: ', error.message);
     }
 }
 
 // Call the seedTripsTable function
-seedTripsTable();
+await seedTripsTable();
 
 // Call the createDestinationTable function
-createDestinationTable();
+await seedDestinationsTable();
 
 // Call the createActivitiesTable function
-createActivitiesTable();
+await createActivitiesTable();
 
 // Call the createTripsDestinationsTable function
-createTripsDestinationsTable();
+await createTripsDestinationsTable();
 
 // Call the createUsersTable function
-createUsersTable();
+await createUsersTable();
 
 // Call the createTripsUsersTable function
-createTripsUsersTable();
+await createUsersTripsTable();
