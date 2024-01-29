@@ -17,7 +17,7 @@ const ActivityBtn = (props) =>  {
       body: JSON.stringify({num_votes: num_votes + 1})
     };
     // Update the number of likes for a specific activity
-    fetch(`/api/activities/${props.id}`, options)
+    fetch(`${props.api_url}/api/activities/${props.id}`, options)
     // Update the number of likes for a specific activity concurrently
     setNumVotes((num_votes) => num_votes + 1)
   }

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './CreateDestination.css'
 
-const CreateDestination = () => {
+const CreateDestination = ({ api_url }) => {
 
     const [destination, setDestination] = useState({destination: "", description: "", city: "", country: "", img_url: "", flag_img_url: "" })
     const {trip_id} = useParams();
@@ -38,7 +38,7 @@ const CreateDestination = () => {
             }
 
             // Adds destination to database
-            const response = await fetch('/api/destinations', options)
+            const response = await fetch(`${api_url}/api/destinations`, options)
             const data = await response.json()  // get the data from the response
             setDestination(data)    // set destination to the data returned from the database
             return data.id
@@ -64,7 +64,7 @@ const CreateDestination = () => {
             }
 
             // Adds trip destination to database
-            const response = await fetch('/api/trip_destinations', options)
+            const response = await fetch(`${api_url}/api/trip_destinations`, options)
             const data = await response.json()  // get the data from the response
             return data
         }

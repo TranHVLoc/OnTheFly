@@ -25,7 +25,7 @@ const ReadDestinations = (props) => {
                          city={destination.city} 
                          country={destination.country}
                          img_url={destination.img_url}
-                         flag_img_url={destination.flag_img_url} 
+                         flag_img_url={destination.flag_img_url}
                     />
                 ) : <h3 className="noResults">{'No Destinations Yet 😞'}</h3>
             }

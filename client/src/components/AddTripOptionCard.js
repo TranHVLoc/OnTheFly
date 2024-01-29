@@ -25,7 +25,7 @@ const AddTripOptionCard = (props) =>  {
     }
 
     // Adds trip destination to database
-    fetch('/api/trips_destinations', options)
+    fetch(`${props.api_url}/api/trips_destinations`, options)
     window.location.href = `/destinations`;
 
 }

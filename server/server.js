@@ -68,11 +68,12 @@ passport.deserializeUser((user, done) => {
     done(null, user);
 });
 
-// Specify that the /users_trips endpoint should use the userTripRoutes router
-app.use('/users_trips', userTripRoutes);
 // Specify that the /auth endpoint should use the authRoutes router
 app.use('/auth', authRoutes);
 // We'll add /api in front of the endpoint so we can set the server proxy for the frontend to /api when we set up the client
+
+// Specify that the /users_trips endpoint should use the userTripRoutes router
+app.use('/api/users_trips', userTripRoutes);
 // Specify that the /trips endpoint should use the tripRoutes router
 app.use('/api/trips', tripRoutes);
 // Specify that the /activities endpoint should use the activityRoutes router
