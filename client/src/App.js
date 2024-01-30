@@ -13,6 +13,8 @@ import TripDetails from './pages/TripDetails'
 import CreateActivity from './pages/CreateActivity';
 import AddToTrip from './pages/AddToTrip';
 import Login from './pages/Login';
+import Avatar from './components/Avatar';
+import AddUserToTrip from './pages/AddUserToTrip';
 
 const API_URL = process.env.API_URL || "http://localhost:3001";  // The URL of the API server, obtained from the .env file
 
@@ -29,7 +31,6 @@ const App = () => {
       const response = await fetch(`${API_URL}/auth/login/success`, { credentials: 'include' } );
       const json = await response.json();
       setUser(json.user);
-      console.log(json.user);
     }
 
     fetchUser();
@@ -59,6 +60,13 @@ const App = () => {
     fetchDestinations();
 
   }, []);
+
+  const logout = async () => {
+    const url = `${API_URL}/auth/logout`;
+    const response = await fetch(url, { credentials: 'include' });
+    const json = await response.json();
+    window.location.href = '/';
+  }
 
   // Sets up routes
   let element = useRoutes([
@@ -102,11 +110,11 @@ const App = () => {
       element: user && user.id ?
         <AddToTrip data={trips} api_url = {API_URL} user={user} /> : <Login api_url = {API_URL} />
     },
-    // {
-    //   path: '/users/add/:trip_id',
-    //   element: user && user.id ?
-    //     <AddUserToTrip user={user}/> : <Login api_url={API_URL} />
-    // }
+    {
+      path: '/users/add/:trip_id',
+      element: user && user.id ?
+        <AddUserToTrip user={user} api_url={API_URL} /> : <Login api_url={API_URL} />
+    }
   ]);
 
   
@@ -120,6 +128,9 @@ const App = () => {
             <Link to="/"><button className="headerBtn">Explore Trips</button></Link>
             <Link to="/destinations"><button className="headerBtn">Explore Destinations</button></Link>
             <Link to="/trip/new"><button className="headerBtn"> + Add Trip </button></Link>
+            <button onClick={logout} className='headerBtn'>Logout</button>
+
+            <Avatar className='avatar' user={user} />
           </div>
         : <></>
       }
