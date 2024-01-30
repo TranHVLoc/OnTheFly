@@ -6,7 +6,7 @@ import { pool } from '../config/database.js'
  * @param {*} res is response
  */
 const createTrip = async (req, res) => {
-    const { title, description, img_url, num_days, start_date, end_date, total_cost } = req.body;
+    const { title, description, img_url, num_days, start_date, end_date, total_cost, username } = req.body;
     
     // Add a SQL query to the database to insert a new row into trips table
     try {
@@ -18,6 +18,12 @@ const createTrip = async (req, res) => {
         );
     
         res.status(201).json(result.rows[0]);
+
+        // Add the username to the given trip
+        const tripUser = await pool.query(
+            'INSERT INTO users_trips (trip_id, username) VALUES ($1, $2) RETURNING *',
+            [result.rows[0].id, username]
+        );
     } catch (error) {
         // Send error message as response
         res.status(409).json({ error: error.message });
@@ -93,13 +99,22 @@ const updateTrip = async (req, res) => {
 const deleteTrip = async (req, res) => {
     try {
         const id = parseInt(req.params.id);
+        // Before deleting a trip, we also have to delete activities associated with the trip
+        const activity_deletion = await pool.query(
+            `DELETE FROM activities WHERE trip_id = $1`, [id]
+        )
+        // Before deleting a trip, we also have to delete user associated with the trip
+        const user_deletion = await pool.query(
+            'DELETE FROM users_trips WHERE trip_id = $1', [id]
+        )
+        // Before deleting a trip, we also have to delete destinations associated with the trip
+        const destination_deletion = await pool.query(
+            'DELETE FROM trips_destinations WHERE trip_id = $1', [id]
+        )
+
         // Delete the trip from trips table
         const results = await pool.query(
             `DELETE FROM trips WHERE id = $1`, [id]
-        )
-        // When deleting a trip, we also have to delete activities associated with the trip
-        const activity_deletion = await pool.query(
-            `DELETE FROM activities WHERE trip_id = $1`, [id]
         )
 
         res.status(200).json(results.rows[0]);
